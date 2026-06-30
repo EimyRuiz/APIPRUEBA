@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const conectarBD = async () => {
     try {
-        const URI = process.env.MONGOURI;
+        const URI = process.env.MONGO_URI;
         await mongoose.connect(URI);
         console.log("¡Conexión exitosa a MongoDB Atlas!");
     } catch (err) {
