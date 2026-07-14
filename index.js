@@ -1,8 +1,9 @@
 const express = require('express');
 
+const methodOverride = require('method-override');
 const conectarBD = require('./config/connectiondb');
 
-// Importar los enrutadores con los nombres exactos del profesor
+// Importar los enrutadores
 const clientesRouter = require('./router/enrutamiento.router');
 const productosRouter = require('./router/producto.router');
 const serviciosRouter = require('./router/servicio.router');

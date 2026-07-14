@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+
+    <header>
+        <%- include('../partials/header'); %>
+    </header>
+
+    <main>
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h1 class="h3 mb-1">Productos</h1>
+                        <p class="text-muted mb-0">Listado de productos. Aquí podras ver, crear, editar y eliminar.</p>
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoProducto">
+                        Nuevo producto
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="tablaProductos" class="table table-striped table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% productos.forEach(function(producto) { %>
+                                <tr>
+                                    <td><%= producto.nombre %></td>
+                                    <td>$ <%= producto.precio %></td>
+                                    <td><%= producto.stock %></td>
+                                    <td class="text-end">
+                                        <button
+                                            type="button"
+                                            class="btn btn-info btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalVerProducto"
+                                            data-nombre="<%= producto.nombre %>"
+                                            data-precio="<%= producto.precio %>"
+                                            data-stock="<%= producto.stock %>"
+                                        >
+                                            Ver
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-warning btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalEditarProducto"
+                                            data-id="<%= producto._id %>"
+                                            data-nombre="<%= producto.nombre %>"
+                                            data-precio="<%= producto.precio %>"
+                                            data-stock="<%= producto.stock %>"
+                                        >
+                                            Editar
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalEliminarProducto"
+                                            data-id="<%= producto._id %>"
+                                            data-nombre="<%= producto.nombre %>"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="modalVerProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalle del producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2"><strong>Nombre:</strong> <span id="verProductoNombre"></span></p>
+                    <p class="mb-2"><strong>Precio:</strong> $ <span id="verProductoPrecio"></span></p>
+                    <p class="mb-0"><strong>Stock:</strong> <span id="verProductoStock"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditarProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- El action apunta al PUT real y el input hidden hace que el formulario envíe _method=PUT. -->
+                <form id="formEditarProducto" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editarProductoNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editarProductoNombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarProductoPrecio" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="editarProductoPrecio" name="precio" min="0" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarProductoStock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="editarProductoStock" name="stock" min="0" step="1" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Guardar cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Con method override también enviamos DELETE desde el formulario. -->
+                <form id="formEliminarProducto" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-0">¿Seguro que deseas eliminar <strong id="eliminarProductoNombre"></strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalNuevoProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="/api/v1/productos" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Nuevo producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="nuevoProductoNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nuevoProductoNombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nuevoProductoPrecio" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="nuevoProductoPrecio" name="precio" min="0" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nuevoProductoStock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="nuevoProductoStock" name="stock" min="0" step="1" value="0" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <%- include('../partials/footer'); %>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="//cdn.datatables.net/2.3.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.js"></script>
+    <script>
+        new DataTable('#tablaProductos');
+
+        document.getElementById('modalVerProducto').addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('verProductoNombre').textContent = button.getAttribute('data-nombre');
+            document.getElementById('verProductoPrecio').textContent = button.getAttribute('data-precio');
+            document.getElementById('verProductoStock').textContent = button.getAttribute('data-stock');
+        });
+
+        document.getElementById('modalEditarProducto').addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+
+            document.getElementById('editarProductoNombre').value = button.getAttribute('data-nombre');
+            document.getElementById('editarProductoPrecio').value = button.getAttribute('data-precio');
+            document.getElementById('editarProductoStock').value = button.getAttribute('data-stock');
+            document.getElementById('formEditarProducto').action = '/api/v1/productos/' + id + '?_method=PUT';
+        });
+
+        document.getElementById('modalEliminarProducto').addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+
+            document.getElementById('eliminarProductoNombre').textContent = button.getAttribute('data-nombre');
+            document.getElementById('formEliminarProducto').action = '/api/v1/productos/' + id + '?_method=DELETE';
+        });
+    </script>
+
+</body>
+
+</html>

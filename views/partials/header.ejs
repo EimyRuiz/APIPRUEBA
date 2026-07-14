@@ -1,11 +1,42 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">EJS is Fun</a>
-  <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-      <a class="nav-link" href="/">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/about">About</a>
-    </li>
-  </ul>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+ <div class="container-fluid">
+   <a class="navbar-brand" href="/">Logo</a>
+   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+     <span class="navbar-toggler-icon"></span>
+   </button>
+   <div class="collapse navbar-collapse" id="collapsibleNavbar">
+     <ul class="navbar-nav">
+        <li class="nav-item">
+          <select class="form-select" name="clientes" onchange="window.location.href=this.value">
+            <option hidden="True" value="" selected>Clientes</option>
+            <option value="/api/v1/listadoclientes">Clientes</option>
+            <option value="/api/v1/formulario">Registrar</option>
+          </select>
+        </li>
+     </ul>
+   </div>
+
+   <div class="collapse navbar-collapse" id="collapsibleNavbar">
+     <ul class="navbar-nav">
+        <li class="nav-item">
+          <select class="form-select" name="clientes" onchange="window.location.href=this.value">
+            <option hidden="True" value="" selected>Servicios</option>
+            <option value="/api/v1/servicios">Servicios</option>
+          </select>
+        </li>
+     </ul>
+   </div>
+
+   <div class="collapse navbar-collapse" id="collapsibleNavbar">
+     <ul class="navbar-nav">
+        <li class="nav-item">
+          <select class="form-select" name="clientes" onchange="window.location.href=this.value">
+            <option hidden="True" value="" selected>Productos</option>
+            <option value="/api/v1/productos">Productos</option>
+          </select>
+        </li>
+     </ul>
+   </div>
+
+ </div>
 </nav>
